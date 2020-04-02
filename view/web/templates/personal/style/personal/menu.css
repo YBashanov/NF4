@@ -1,0 +1,35 @@
+/*меню персональной части*/
+div.menuP div.element{
+	text-align:center;
+	cursor:pointer;
+	border:1px solid #aaa;
+	background-color:#ddd;
+	margin-bottom:4px;
+	padding:5px;
+	width:160px;
+	
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	border-radius: 2px;
+}
+div.menuP a div.element{
+	text-decoration:none;
+	color:#222;
+}
+div.menuP div.element:hover{
+	border:1px solid #222;
+	background-color:#222;
+	text-decoration:underline;
+}
+div.menuP a div.element:hover{
+	color:#eee;
+	text-decoration:underline;
+}
+div.menuP div.element.active{
+	border:1px solid #222;
+	background-color:#222;
+}
+div.menuP a div.element.active{
+	color:#eee;
+}

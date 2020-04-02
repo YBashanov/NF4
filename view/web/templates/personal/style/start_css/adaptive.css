@@ -1,0 +1,52 @@
+._100_{width:100%;}
+.adaptive{
+    height: 100%;
+    //overflow: hidden;
+}
+.heightAuto {
+    height: auto;
+}
+
+
+@media (min-width: 1px) {
+    .adaptive{
+        display: block;
+        width:100%;
+    }
+}
+@media (min-width: 480px) {
+    .adaptive{
+        display: block;
+        width:100%;
+    }
+}
+@media (min-width: 768px) {
+    .adaptive{
+        width:768px;
+    }
+}
+@media (min-width: 992px) {
+    .adaptive{
+        width:992px;
+    }
+}
+@media (min-width: 1200px) {
+    .adaptive{
+        width:1200px;
+    }
+}
+.adaptive{
+    margin-left: auto;
+    margin-right: auto;
+}
+.not_adaptive{
+    width:992px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+
+

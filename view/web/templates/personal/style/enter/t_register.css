@@ -1,0 +1,125 @@
+/*структура блоков*/
+div.register_form{
+	border:1px dotted #555;
+	width:350px;
+	padding:5px 10px 5px 10px;
+	margin:15px 0 15px 0;
+	
+	font-family:Tahoma;
+	font-size:14px;
+	color:#555;/*для ответа*/
+}
+div.register_form div.headForm{
+	font-size:14px;
+	color:#555;
+}
+div.register_form div.longLine{
+	border-top:1px solid #999;
+	height:10px;
+}
+div.register_form form div.block{
+	padding:5px 0 5px 0;
+}
+div.register_form form div.block div.error span.searchLogin{
+	color:#0a0;
+}
+div.register_form form div.name{
+	float:left;
+	width:70px;
+	color:#555;
+}
+div.register_form form div.error{
+	float:left;
+	padding:0 0 0 10px;
+	font-size:11px;
+	color:#f22;
+}
+div.register_form form div.captcha{
+	float:left;
+	width:120px;
+	height:45px;
+}
+div.register_form form div.captcha_right{
+	float:left;
+	height:45px;
+	margin-left:5px;
+}
+div.register_form form div.anchorCaptcha{
+	color:#555;
+	text-decoration:underline;
+	cursor:pointer;
+	font-size:12px;
+	padding-top:2px;
+}
+div.register_form form div.anchorCaptcha:hover{
+	color:#0cf;
+}
+div.register_form form div.comment{
+	float:left;
+	font-size:11px;
+	font-family:Arial, Helvetica, sans-serif;
+	padding-left:1px;
+}
+div.register_form form div.remember{
+	float:right;
+}
+div.register_form form div.register{
+	float:left;
+}
+div.register_form form div.register a, div.register_form form div.remember a{
+	color:#111;
+	text-decoration:underline;
+}
+div.register_form form div.register a:hover, div.register_form form div.remember a:hover{
+	color:#007;
+}
+
+
+/*структура формы*/
+div.register_form form input.text{
+	border:1px solid #aaa;
+	width:150px;
+	height:22px;
+	font-size:14px;
+	padding:0 2px 0 4px;
+	float:left;
+	
+	/*-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-khtml-border-radius: 6px;
+	border-radius: 6px;
+	behavior: url(/libraries/L_PIE/PIE.htc);*/
+}
+div.register_form form input.text:hover{
+	background-color:#ddd;
+}
+div.register_form form input.captcha{
+	float:left;
+	border:1px solid #999;
+	width:100px;
+	height:25px;
+	font-size:18px;
+	padding:0 2px 0 4px;
+}
+div.register_form form input.captcha:hover{
+	background-color:#ddd;
+}
+div.register_form form input.submit{
+	font-family:Tahoma;
+	font-size:13px;
+	border:1px solid #aaa;
+	background-color:#ddd;
+	padding:7px 20px 7px 20px;
+	cursor:pointer;
+	
+	/*-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px;
+	behavior: url(/libraries/L_PIE/PIE.htc);*/
+}
+div.register_form form input.submit:hover{
+	background-color:#222;
+	color:#fff;
+	text-decoration:underline;
+}

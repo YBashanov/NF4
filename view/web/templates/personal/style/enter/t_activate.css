@@ -1,0 +1,21 @@
+div.activate_form{
+	text-align:center;
+	
+	font-family:Tahoma, Verdana;
+	font-size:14px;
+	color:#333;
+}
+div.activate_form div.text{
+	color:#333;
+}
+div.activate_form a{
+	color:#333;
+}
+div.activate_form a:hover{
+	color:#ff0;
+}
+
+div.activate_form div.error{
+	color:#ff0;
+}
+

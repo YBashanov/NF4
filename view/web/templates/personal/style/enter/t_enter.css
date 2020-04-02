@@ -1,0 +1,85 @@
+/*структура блоков*/
+div.enter_form{
+	font-family:Tahoma;
+	border:1px dotted #333;
+	width:350px;
+	padding:5px 10px 5px 10px;
+	margin:15px 0 15px 0;
+	
+	font-family:Tahoma;
+	font-size:14px;
+}
+div.enter_form div.headForm{
+	font-size:14px;
+	color:#333;
+}
+div.enter_form div.longLine{
+	border-top:1px solid #333;
+	height:10px;
+}
+div.enter_form form div.block{
+	padding:5px 0 5px 0;
+}
+div.enter_form form div.name{
+	float:left;
+	width:70px;
+	color:#333;
+}
+div.enter_form form div.error{
+	float:left;
+	padding:0 0 0 10px;
+	font-size:11px;
+	color:#f22;
+}
+div.enter_form form div.remember{
+	float:right;
+}
+div.enter_form form div.register{
+	float:left;
+}
+div.enter_form form div.register a, div.enter_form form div.remember a{
+	color:#111;
+	text-decoration:underline;
+}
+div.enter_form form div.register a:hover, div.enter_form form div.remember a:hover{
+	color:#008;
+}
+
+
+/*структура формы*/
+div.enter_form form input.text{
+	border:1px solid #999;
+	width:200px;
+	height:25px;
+	font-size:16px;
+	padding:0 2px 0 4px;
+	float:left;
+	
+	/*-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px;
+	behavior: url(/libraries/L_PIE/PIE.htc);*/
+}
+div.enter_form form input.text:hover{
+	background-color:#ddd;
+}
+div.enter_form form input.submit{
+	font-family:Tahoma;
+	font-size:13px;
+	border:1px solid #aaa;
+	background-color:#ddd;
+	padding:7px 10px 7px 10px;
+	cursor:pointer;
+	
+	/*-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px;
+	behavior: url(/libraries/L_PIE/PIE.htc);*/
+}
+div.enter_form form input.submit:hover{
+	background-color:#222;
+	color:#fff;
+	text-decoration:underline;
+}

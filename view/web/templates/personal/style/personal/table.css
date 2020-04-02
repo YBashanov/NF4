@@ -1,0 +1,407 @@
+div.secTable{
+	padding:0px; margin:0px; border:1px solid #fff;
+	font-family:Tahoma, Arial, sans-serif;
+}
+div.secTable div.tr{
+	background-color:#fff;
+	padding:0; margin:0;
+}
+div.secTable div.tr.Head div.td{
+	float:left;
+	border-top:1px solid #fff;
+	border-left:1px solid #fff;
+	border-right:1px solid #bbb;
+	border-bottom:1px solid #bbb;
+	background-color:#cacaca;
+	cursor:pointer;
+	padding:1px 3px 1px 3px;
+	text-align:center;
+	font-size:11px;
+	font-weight:700;
+}
+div.secTable div.tr div.td{
+	float:left;
+	border-top:1px solid #fff;
+	border-left:1px solid #fff;
+	border-right:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+
+	background-color:#eee;
+	cursor:pointer;
+	padding:1px 3px 1px 3px;
+	min-height:17px;
+	font-size:11px;
+	font-weight:400;
+}
+div.secTable div.tr.proMon div.td{
+	min-height:100px;
+}
+div.secTable div.tr.text47 div.td{
+	min-height:47px;
+}
+div.secTable div.tr.foto{
+	float:left;
+}
+div.secTable div.tr.foto div.td.foto{
+	min-height:100px;
+}
+div.secTable div.tr.textarea div.td{
+	min-height:47px;
+}
+div.secTable div.tr div.td.td0{width:16px;}
+div.secTable div.tr div.td.td1{width:80px;}
+
+/*раздел - "настройки страниц"*/
+div.secTable div.tr div.td.the1{width:80px;}
+div.secTable div.tr div.td.the2{width:200px;}
+div.secTable div.tr div.td.the3{width:150px;}
+div.secTable div.tr div.td.the4{width:90px;}
+/*раздел - "подписчики"*/
+div.secTable div.tr div.td.subp1{width:80px;}
+div.secTable div.tr div.td.subp2{width:200px;}
+/*раздел - "изделие месяца"*/
+div.secTable div.tr div.td.proM1{width:80px;}
+div.secTable div.tr div.td.proM2{width:102px;}
+div.secTable div.tr div.td.proM3{width:150px;}
+div.secTable div.tr div.td.proM4{width:200px;}
+div.secTable div.tr div.td.proM5{width:280px;}
+div.secTable div.tr div.td.proM6{width:20px;}
+/*раздел - новости*/
+div.secTable div.tr div.td.new1{width:80px;}
+div.secTable div.tr div.td.new2{width:170px;}
+div.secTable div.tr div.td.new3{width:250px;}
+div.secTable div.tr div.td.new4{width:80px;}
+div.secTable div.tr div.td.new5{width:50px;}
+div.secTable div.tr div.td.new6{width:50px;}
+div.secTable div.tr div.td.new7{width:150px;}
+div.secTable div.tr div.td.new11{width:120px;}
+/*раздел - номера журналов*/
+div.secTable div.tr div.td.mag1{width:50px;}
+div.secTable div.tr div.td.mag2{width:50px;}
+div.secTable div.tr div.td.mag3{width:100px;}
+div.secTable div.tr div.td.mag4{width:180px;}
+div.secTable div.tr div.td.mag5{width:20px;}
+div.secTable div.tr div.td.mag6{width:80px;}
+div.secTable div.tr div.td.mag7{width:150px;}
+div.secTable div.tr div.td.mag11{width:500px;}
+div.secTable div.tr div.td.mag12{width:200px;}
+/*поздравляем*/
+div.secTable div.tr div.td.con1{width:50px;}
+div.secTable div.tr div.td.con2{width:50px;}
+div.secTable div.tr div.td.con3{width:250px;}
+div.secTable div.tr div.td.con4{width:250px;}
+
+
+
+
+/*подождите..*/
+div.secTable div.tr div.td.tdSumThe{width:948px;}
+div.secTable div.tr div.td.tdSumCla{width:692px;}
+div.secTable div.tr div.td.tdSumSubs{width:376px;}
+div.secTable div.tr div.td.tdSumNews{width:966px;}
+div.secTable div.tr div.td.tdSumProMon{width:960px;}
+div.secTable div.tr div.td.tdSumBan{width:752px;}
+div.secTable div.tr div.td.tdSumMag{width:960px;}
+div.secTable div.tr div.td.tdSumDocs{width:796px;}
+div.secTable div.tr div.td.tdSumComp{width:880px;}
+div.secTable div.tr div.td.tdSumCale{width:788px;}
+div.secTable div.tr div.td.tdSumFill{width:928px;}
+div.secTable div.tr div.td.tdSumCong{width:712px;}
+div.secTable div.tr div.td.td5 div.dButton{padding-top:1px;}
+
+/*элементы форм*/
+div.secTable div.tr div.td input.text, div.secTable div.adjust div.td input.text{
+	border:1px solid #333;
+	height:16px;
+	font-size:11px;
+	font-family:Tahoma, Arial, sans-serif;
+	color:#333;
+}
+div.secTable div.tr div.td input.checkbox, div.secTable div.adjust div.td input.checkbox{
+	width: 20px;
+	height: 20px;
+}
+div.secTable div.tr div.td textarea, div.secTable div.adjust div.td textarea{
+	height:45px;
+	border:1px solid #333;
+	font-size:11px;
+	font-family:Tahoma, Arial, sans-serif;
+	color:#333;
+}
+div.secTable div.tr.proMon div.td textarea{height:98px;}
+div.secTable div.tr div.td select, div.secTable div.adjust div.td select{
+	height:18px;
+	border:1px solid #333;
+	font-size:11px;
+	font-family:Tahoma, Arial, sans-serif;
+	color:#333;
+}
+
+div.secTable div.tr div.td.td2 input.text{width:300px;}
+div.secTable div.tr div.td.td12 input.text{width:200px;}
+div.secTable div.tr div.td.td13 input.text{width:70px;}
+div.secTable div.tr div.td.td14 input.text{width:80px;}
+div.secTable div.tr div.td.the3 input.text{width:150px;}
+div.secTable div.tr div.td.new1 input.text{width:80px;}
+div.secTable div.tr div.td.new2 input.text{width:170px;}
+div.secTable div.tr div.td.new6 input.text{width:50px;}
+div.secTable div.tr div.td.mag1 input.text{width:50px;}
+div.secTable div.tr div.td.mag2 input.text{width:50px;}
+div.secTable div.tr div.td.con1 input.text{width:50px;}
+div.secTable div.tr div.td.con2 input.text{width:50px;}
+
+div.secTable div.tr div.td.td2 textarea{width:300px;}
+div.secTable div.tr div.td.td12 textarea{width:200px;}
+div.secTable div.tr div.td.proM3 textarea{width:150px;}
+div.secTable div.tr div.td.proM4 textarea{width:200px;}
+div.secTable div.tr div.td.proM5 textarea{width:280px;}
+div.secTable div.tr div.td.new3 textarea{width:250px;}
+div.secTable div.tr div.td.new7 textarea{width:150px;}
+div.secTable div.tr div.td.mag4 textarea{width:180px;}
+div.secTable div.tr div.td.mag6 textarea{width:80px;}
+div.secTable div.tr div.td.mag11 textarea{width:500px;}
+div.secTable div.tr div.td.mag12 textarea{width:200px;}
+div.secTable div.tr div.td.con3 textarea{width:250px;}
+div.secTable div.tr div.td.con4 textarea{width:250px;}
+
+div.secTable div.tr div.td.the2 select{width:200px;}
+div.secTable div.tr div.td.the3 select{width:150px;}
+div.secTable div.tr div.td.new4 select{width:80px;}
+div.secTable div.tr div.td.mag3 select{width:100px;}
+div.secTable div.tr div.td.new11 select{width:120px;}
+
+
+
+div.secTable div.tr.Head:hover div.td{
+	background-color:#cacaca;
+}
+div.secTable div.tr:hover div.td{
+	background-color:#e0e0e0;
+}
+div.secTable div.tr div.td div.plus{
+	border:1px solid #222;
+	width:12px;
+	height:11px;
+	line-height:8px;
+	font-size:16px;
+	font-family: Tahoma, Arial, sans-serif;
+	margin:1px 0 0 1px;
+	padding-top: 1px;
+}
+div.secTable div.tr div.td div.minus{
+	border:1px solid #222;
+	width:9px;
+	height:11px;
+	line-height:8px;
+	font-size:16px;
+	font-family:Tahoma, Arial, sans-serif;
+	padding-left: 3px;
+	margin:1px 0 0 1px;
+    padding-top: 1px;
+}
+div.secTable div.tr div.td div.uploads{
+	border:1px solid #333;
+	text-align:center;
+}
+
+
+/*подклассы*/
+div.secTable div.forsubclass{
+	width:900px;
+	background:url(/@/backg/subclass.png) repeat-y;
+}
+div.secTable div.forproducts{
+	width:1100px;
+	background:url(/@/backg/subclass.png) repeat-y;
+}
+div.secTable div.foradjust{
+	width:900px;
+	background:url(/@/backg/subclass.png) repeat-y;
+}
+div.secTable.classes{
+	margin-left:22px;
+}
+div.secTable.products{
+	margin-left:22px;
+}
+div.secTable.adjust{
+	margin-left:22px;
+}
+
+
+
+/*черные кнопки*/
+div.secTable div.tr div.crButton{
+	width:160px;
+	border:1px solid #999;
+	background-color:#ddd;
+	padding:1px 5px 1px 5px;
+	margin-top:10px;
+	cursor:pointer;
+}
+div.secTable div.tr div.crButton:hover{
+	background-color:#333;
+	border:1px solid #111;
+	color:#eee;
+}
+div.secTable div.tr div.pressButton{
+	width:150px;
+	border:1px solid #999;
+	background-color:#ddd;
+	padding:1px 5px 1px 5px;
+	cursor:pointer;
+}
+div.secTable div.tr div.pressButton:hover{
+	background-color:#333;
+	border:1px solid #111;
+	color:#eee;
+}
+
+
+/*окно настроек*/
+div.secTable.fotos{
+	width:978px;
+}
+div.secTable div.adjust{
+	width:978px;
+}
+div.secTable div.adjust div.border{
+	margin-bottom:15px;
+	border:1px solid #333;
+	padding:8px 11px 8px 11px;
+}
+div.secTable div.adjust div.td{
+	float:left;
+	padding:4px;
+	font-size:11px;
+	font-weight:400;
+	color:#111;
+}
+div.secTable div.adjust div.td div.inform{
+	float:left;
+	margin-right:55px;
+}
+div.secTable div.adjust div.td div.language{
+	float:left;
+	margin-right:25px;
+	font-size:12px;
+	font-weight:700;
+	color:#222;
+	cursor:pointer;
+	text-decoration:none;
+}
+div.secTable div.adjust div.td div.language:hover{
+	color:#f22;
+}
+div.secTable div.adjust div.td div.language.active{
+	color:#22f;
+	text-decoration:underline;
+}
+div.secTable div.adjust div.td div.aHead{
+	font-size:11px;
+	color:#111;
+	text-align:center;
+	margin-bottom:3px;
+	padding:0 4px 0 4px;
+}
+div.secTable div.adjust div.td div.comment{
+	font-size:10px;
+	color:#666;
+}
+div.secTable div.adjust div.td div.ok{
+	font-size:14px;
+	font-weight:700;
+	color:#0c0;
+}
+div.secTable div.adjust div.td div.error{
+	font-size:14px;
+	font-weight:700;
+	color:#f00;
+}
+
+div.secTable div.adjust div.td.fot1{width:200px;}
+div.secTable div.adjust div.td.fot2{width:150px;}
+div.secTable div.adjust div.td.fot3{width:160px;}
+div.secTable div.adjust div.td.fot4{width:200px;}
+div.secTable div.adjust div.td.magAdj1{width:130px;}
+
+/*подождите..*/
+div.secTable div.adjust div.td.tdSumFoto{
+	margin-bottom:15px;
+	border:1px solid #333;
+	padding:8px 11px 8px 11px; 
+	width:954px; height:207px;
+}
+div.secTable div.adjust div.td.tdSumMagAdj{
+	margin-bottom:15px;
+	border:1px solid #333;
+	padding:8px 11px 8px 11px; 
+	width:954px; height:387px;
+}
+div.secTable div.adjust div.td.tdSumFilAdj{
+	margin-bottom:15px;
+	border:1px solid #333;
+	padding:8px 11px 8px 11px; 
+	width:954px; height:361px;
+}
+
+div.secTable div.adjust div.td textarea{
+	/*height:250px;*/
+	height:50px;
+}
+
+div.secTable div.adjust div.td.fot1 select{width:200px;}
+div.secTable div.adjust div.td.fot2 input.text{width:150px;}
+div.secTable div.adjust div.td.fot3 input.text{width:160px;}
+div.secTable div.adjust div.td.fot4 textarea{width:200px;}
+div.secTable div.adjust div.td.magAdj1 textarea{width:600px; height:250px;}
+
+
+/*черные кнопки*/
+div.secTable div.adjust div.saButton, div.secTable div.adjust input.saButton{
+	width:160px;
+	border:1px solid #999;
+	background-color:#ddd;
+	padding:1px 5px 1px 5px;
+	margin-top:10px;
+	cursor:pointer;
+}
+div.secTable div.adjust div.saButton:hover, div.secTable div.adjust input.saButton:hover{
+	background-color:#333;
+	border:1px solid #111;
+	color:#eee;
+}
+/*-----------------------------------------------------------------------------*/
+
+
+/*таблица сортировки*/
+div.sort{
+	width:178px;
+	margin-top:20px;
+	border:1px solid #333;
+	background-color:#ddd;
+	font-size:11px;
+	text-align:center;
+}
+div.sort div.lineSort{
+	border-bottom:1px solid #bbb;
+	width:150px;
+	margin:3px 0 3px 20px;
+}
+div.sort div.tr_Head{
+	text-align:center;
+	padding:2px 0 2px 0;
+	font-weight:700;
+	font-size:12px;
+	color:#222;
+}
+div.sort div.tr_Head div.td{}
+div.sort div.tr{
+	margin-bottom:7px;
+}
+div.sort div.tr div.td select{
+	width:150px;
+	height:18px;
+	font-size:11px;
+	border:1px solid #999;
+}

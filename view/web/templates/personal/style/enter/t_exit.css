@@ -1,0 +1,17 @@
+div.exit_form{
+	text-align:left;
+	/*float:right;*/
+}
+div.exit_form button.submit{
+	font-family: Tahoma, sans-serif;
+	font-size:13px;
+	border:1px solid #aaa;
+	background-color:#ddd;
+	padding:3px 20px 3px 20px;
+	cursor:pointer;
+}
+div.exit_form button.submit:hover{
+	background-color:#222;
+	color:#eee;
+	text-decoration:underline;
+}

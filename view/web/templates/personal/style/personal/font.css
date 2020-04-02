@@ -1,0 +1,77 @@
+body{
+	font-family: Tahoma, Helvetica, sans-serif;
+	font-size:12px;
+	color:#555;
+}
+a, div.a{
+	text-decoration:none;
+	color:#22a;
+	cursor:pointer;
+}
+a:hover, div.a:hover{
+	color:#55f;
+	text-decoration:underline;
+}
+a.none:hover, div.none:hover{
+	text-decoration:none;
+}
+div.separator{
+	height:10px;
+}
+
+div.helpStart div.help{
+	font-family:Tahoma, Arial, sans-serif;
+	font-size:12px;
+	font-weight:400px;
+	color:#555;
+	font-style:normal;
+}
+
+td.personal div.head{
+	color:#111;
+	font-size:12px;
+	font-weight:400;
+}
+td.personal div.head div.panelname a.sitename{
+	color:#007;
+	font-weight:700;
+	text-transform:uppercase;
+}
+
+
+
+div.secTable div.tr.Head div.td{
+	color:#111;
+}
+div.secTable div.tr div.td input, div.secTable div.tr div.td textarea{
+	font-family:Tahoma, Arial, sans-serif;
+	font-size:12px;
+}
+
+
+
+
+/*нумерация страниц*/
+.pageClose{
+	font-family:Tahoma, Book Antiqua, sans-serif;
+	color:#424930;
+	font-size:13px;
+	text-decoration:none;
+}
+.pageOpen{
+	font-family:Tahoma, Book Antiqua, sans-serif;
+	color:#f00;
+	font-size:15px;
+	text-decoration:none;
+}
+div.comments{
+	font-size:11px;
+}
+
+
+
+
+
+
+
+
