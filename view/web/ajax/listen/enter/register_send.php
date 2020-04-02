@@ -13,8 +13,7 @@ if (!$global['authorization']) {
             $regResult = $regular->getResult();
 
             //проверяем логин на уникальность
-            //$where = "`login`='{$regResult['login']}' AND NOT(`deleted`)";
-            $where = "`login`='{$regResult['login']}'";
+            $where = "`login`='{$regResult['login']}' AND NOT(`deleted`)";
             $what = "`id`, `status`, `time_create`";
             $usersLogin = $db->select_line("{$config['prefix']}users", $where, $what);
 
@@ -38,8 +37,7 @@ if (!$global['authorization']) {
             if (!$usersLogin) {
 
                 //проверяем mail уникальность
-                //$where = "`mail`='{$regResult['mail']}' AND NOT(`deleted`)";
-                $where = "`mail`='{$regResult['mail']}'";
+                $where = "`mail`='{$regResult['mail']}' AND NOT(`deleted`)";
                 $what = "`id`";
                 $usersMail = $db->select_line("{$config['prefix']}users", $where, $what);
 
