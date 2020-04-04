@@ -1,9 +1,12 @@
 <?php
 // 2020-02-26
 // 2020-03-25 - добавление mode=sqlite3
+// 2020-04-04 - добавление mode=files
 
 
 namespace niley4;
+
+
 
 /**
  * Сбор ошибок действия скриптов
@@ -25,7 +28,7 @@ namespace niley4;
 
  */
 class Database extends _Singleton {
-
+    private $config = null;
 
 	//-----------------------------------------------------------------------------------------------------
     //                                      	РЕЖИМ РАБОТЫ
@@ -42,6 +45,9 @@ class Database extends _Singleton {
 		if ($this->mode == "sqlite") {
 			//SQLite3::enableExceptions(true);
 		}
+        else if ($this->mode == "files") {
+            include "database_ext/Sorts.php";
+        }
 	}
 	public function getMode() {
         return $this->mode;
@@ -105,26 +111,36 @@ class Database extends _Singleton {
 
     /**
      * Установить соединение с базой
+     *
+     * для mysqli:
      * $config = array(
      *    'host'
      *    'user'
      *    'pass'
-     *    'db' (для sqlite только db)
+     *    'db'
      *    'character_set' => ''
      *    'prefix' => ''
      * );
+     *
+     * для sqlite: только [db=>], ссылается на файл базы данных
+     * для files: только [db=>], ссылается на папку с файлами таблиц (в конце пути слэш!!)
      */
     public function connect($config){
 		if (!isset($this->logObject)) {
             echo "Предупреждение: Не установлен logObject! Используй метод db->setLogObject(logObject)<br />";
         }
 
+        $this->config = $config;
+
 		if ($this->mode == "mysqli") {
 			return $this->connectMysqli($config);
 		}
 		elseif ($this->mode == "sqlite") {
-			return $this->connectSqlite($config);
+            return $this->connectSqlite($config);
 		}
+        elseif ($this->mode == "files") {
+            return $this->connectFiles($config);
+        }
 	}
 
 
@@ -229,6 +245,35 @@ class Database extends _Singleton {
 
 
     /**
+     * connect для files
+     */
+    private function connectFiles($config) {
+        $isValid = true;
+        if (! isset($config['db'])) {
+            $this->addLog("connect: Отсутствует параметр db, необходимо указать путь до файла");
+            $isValid = false;
+        }
+
+        if ($isValid) {
+            if (!file_exists($config['db'])) {
+
+                mkdir($config['db']);
+            }
+
+            if (file_exists($config['db'])) {
+                $this->link = array();
+
+                return $this->link;
+            }
+            else {
+                $this->addLog("connect: Невозможно создать каталог");
+            }
+        }
+        return null;
+    }
+
+
+    /**
      * Закрытие соединения
      */
     public function close_connect(){
@@ -238,6 +283,9 @@ class Database extends _Singleton {
 		elseif ($this->mode == "sqlite") {
 			return $this->close_connectSqlite();
 		}
+        elseif ($this->mode == "files") {
+            return $this->close_connectFiles();
+        }
 	}
 
 
@@ -284,6 +332,22 @@ class Database extends _Singleton {
 
 
     /**
+	 *
+	 */
+	private function close_connectFiles() {
+		if (isset($this->link)){
+            // пройтись в цикле и закрыть все файлы
+            $this->link = null;
+            return true;
+        }
+        else {
+            $this->addLog("close_connect: link не является ресурсом");
+            return false;
+        }
+	}
+
+
+    /**
      * Уничтожение объекта
      */
     public function __destruct(){
@@ -306,6 +370,9 @@ class Database extends _Singleton {
 		}
 		elseif ($this->mode == "sqlite") {
 			return $this->querySqlite($query, $operator);
+		}
+        elseif ($this->mode == "files") {
+			return $this->queryFiles($query, $operator);
 		}
 	}
 
@@ -340,6 +407,15 @@ class Database extends _Singleton {
 				$this->addLog($e->getMessage(), $operator, $query);
 				return null;
 			}
+        }
+        return null;
+	}
+
+
+    private function queryFiles($query, $operator) {
+        if (isset($this->link)) {
+            $result = $this->_queryFiles($query, $operator);
+            return $result;
         }
         return null;
 	}
@@ -467,6 +543,9 @@ class Database extends _Singleton {
 		elseif ($this->mode == "sqlite") {
 			return $this->selectSqlite($table, $where, $what, $key, $mysql_num);
 		}
+        elseif ($this->mode == "files") {
+            return $this->selectFiles($table, $where, $what, $key, $mysql_num);
+        }
 	}
 
 
@@ -556,6 +635,18 @@ class Database extends _Singleton {
 		}
 		return null;
 	}
+
+
+    private function selectFiles($table, $where, $what, $key, $mysql_num) {
+        $query = array(
+            "table"=>$table,
+            "where"=>$where,
+            "what"=>$what,
+            "key"=>$key,
+            "mysql_num"=>$mysql_num,
+        );
+        return $this->query($query, 'select');
+    }
 
 
     /**
@@ -682,6 +773,9 @@ class Database extends _Singleton {
 		elseif ($this->mode == "sqlite") {
 			return $this->insertSqlite($table, $data, $tail);
 		}
+        elseif ($this->mode == "files") {
+            return $this->insertFiles($table, $data, $tail);
+        }
 	}
 
 
@@ -705,6 +799,16 @@ class Database extends _Singleton {
 		}
 		return true;
 	}
+
+
+    private function insertFiles ($table, $data, $tail) {
+        $query = array(
+            "table"=>$table,
+            "data"=>$data,
+            "tail"=>$tail
+        );
+        return $this->query($query, 'insert');
+    }
 
 
     /**
@@ -755,6 +859,9 @@ class Database extends _Singleton {
 		elseif ($this->mode == "sqlite") {
 			return $this->updateSqlite($table, $data, $where);
 		}
+        elseif ($this->mode == "files") {
+            return $this->updateFiles($table, $data, $where);
+        }
 	}
 
 
@@ -785,6 +892,15 @@ class Database extends _Singleton {
 		return true;
 	}
 
+
+    private function updateFiles($table, $data, $where){
+        $query = array(
+            "table"=>$table,
+            "data"=>$data,
+            "where"=>$where
+        );
+        return $this->query($query, 'update');
+    }
 
 
     /**
@@ -855,6 +971,430 @@ class Database extends _Singleton {
 		$result = $result!==''?substr($result, 0, -2):$result;
 		return $result;
 	}
+
+
+    //------------------------------------------------------------------------------------------------------
+    //                                        ОБРАБОТКА ДЛЯ mode=FILES
+    //------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * Создать таблицу базы данных - ТОЛЬКО для mode=files
+     */
+    public function createTable($table, $data){
+        $query = array(
+            "table"=>$table,
+            "data"=>$data
+        );
+        return $this->query($query, 'createTable');
+    }
+
+
+    /**
+     * Обработка запросов для mode=files
+     */
+    private function _queryFiles($query, $operator) {
+        if ($operator == "createTable") {
+            return $this->_query_createTable($query, $operator);
+        }
+        else if ($operator == "insert") {
+            return $this->_query_insert($query, $operator);
+        }
+        else if ($operator == "update") {
+            return $this->_query_update($query, $operator);
+        }
+        else if ($operator == "select") {
+            return $this->_query_select($query, $operator);
+        }
+    }
+
+
+    /**
+     *
+     * $data = array(
+     *   'id'          => "int(11) auto_increment PRIMARY_KEY",
+     *   'deleted'     => "int(1) default 0",
+     *   'tempFileName'=> "varchar(255) default ''",
+     *   'date_create' => "varchar(20) default ''",
+     *   'date_update' => "varchar(20)"
+     * );
+     */
+    private function _query_createTable($query, $operator) {
+        $filename = $this->config['db'] . $query['table'];
+        if (!file_exists($filename)){
+            touch($filename);
+        }
+
+        if (file_exists($filename)){
+            $file = fopen($filename, "a+");
+
+            $json = fread($file, filesize($filename));
+            $array = json_decode($json, true);
+
+            if ($array['table'] == $query['table']) {
+                $this->addLog("Таблица {$query['table']} уже создана", $operator);
+            }
+            else {
+                // создаем запись в файле в формате json
+                $structure = array();
+                $isValid = true;
+
+                foreach ($query['data'] as $key=>$val) {
+                    $type = explode("(", $val);
+
+                    if ($type[0] !== "int" && $type[0] !== "varchar") {
+                        $this->addLog("Неверно указан тип данных", $operator);
+                        $isValid = false;
+                        break;
+                    }
+
+                    $length = explode(")", $type[1]);
+
+                    if ($length[0] != (int) $length[0]) {
+                        $this->addLog("Неверно указана длина типа данных", $operator);
+                        $isValid = false;
+                        break;
+                    }
+
+                    $default = explode("default", $length[1]);
+                    if (isset($default[1])) {
+                        $default[1] = trim($default[1]);
+                    }
+                    else {
+                        $default[1] = null;
+                    }
+
+                    $auto_increment = strpos($length[1], "auto_increment");
+                    if ($auto_increment !== false) {
+                        $auto_increment = true;
+                    }
+
+                    $structure[$key] = array(
+                        "type"=>$type[0], // int
+                        "length"=>$length[0], // 11
+                        "default"=>$default[1], // 0
+                        "auto_increment"=>$auto_increment, // false
+                        // primary_key
+                    );
+                }
+
+                if ($isValid) {
+                    $example = array(
+                        "table" => $query['table'],
+                        "structure" => $structure,
+                        "increment_value"=>0, // если есть auto_increment, такой ключ будет синхронизирован с этим полем
+                        "data" => array()
+                    );
+                    $string = json_encode($example);
+                    if (fwrite($file, $string)) {
+                        fclose($file);
+                        return true;
+                    }
+                    else {
+                        $this->addLog("Невозможно записать данные в файл", $operator);
+                    }
+                }
+                else {
+                    $this->addLog("Ошибка при создании таблицы", $operator);
+                }
+            }
+
+            fclose($file);
+        }
+        else {
+            $this->addLog("Невозможно создать файл-таблицу базы данных", $operator);
+        }
+        return false;
+    }
+
+
+    private function _query_insert($query, $operator) {
+        $filename = $this->config['db'] . $query['table'];
+
+        if (file_exists($filename)){
+            $file = fopen($filename, "r");
+            $json = fread($file, filesize($filename));
+            fclose($file);
+
+            $array = json_decode($json, true);
+
+            if ($array['table'] == $query['table']) {
+
+                if (isset($query['data'])) {
+                    $item = array();
+
+                    foreach ($array['structure'] as $key=>$a_val) {
+
+                        if (isset($query['data'][$key])) {
+                            $value = $query['data'][$key];
+                            $isValid = true;
+
+                            // проверка только на int
+                            if ($a_val['type'] == "int") {
+                                if ($value != (int) $value) {
+                                    $isValid = false;
+                                    $this->addLog("Неверный тип данных, не int", $operator);
+                                }
+                            }
+
+                            // проверка количества символов
+                            $strlen = mb_strlen($value, 'utf-8');
+                            if ($a_val['length'] < $strlen) {
+                                $isValid = false;
+                                $this->addLog("Количество символов больше указанного, > {$a_val['length']}", $operator);
+                            }
+
+                            // сохранение
+                            if ($isValid) {
+                                $item[$key] = $value;
+                            }
+                        }
+                        // заполняем auto_increment, default
+                        else {
+                            if ($a_val['auto_increment'] === true) {
+                                $item[$key] = $array['increment_value'] = $array['increment_value'] + 1;
+                            }
+                            else if ($a_val['default'] !== NULL) {
+                                $item[$key] = $a_val['default'];
+                            }
+                            else {
+                                $item[$key] = NULL;
+                            }
+                        }
+
+                    }
+                    $array['data'][] = $item;
+                    $string = json_encode($array);
+                    $file = fopen($filename, "w");
+
+                    if (fwrite($file, $string)) {
+                        fclose($file);
+                        return true;
+                    }
+                    else {
+                        $this->addLog("Невозможно записать данные в файл", $operator);
+                    }
+                    fclose($file);
+                }
+                else {
+                    $this->addLog("Нет данных в запросе", $operator);
+                }
+            }
+            else {
+                $this->addLog("Некорректный формат файла-таблицы. Возможно, таблица не создана", $operator);
+            }
+        }
+        else {
+            $this->addLog("Нет такого файла-таблицы", $operator);
+        }
+        return false;
+    }
+
+
+    private function _query_update($query, $operator) {
+        $filename = $this->config['db'] . $query['table'];
+
+        if (file_exists($filename)){
+            $file = fopen($filename, "r");
+            $json = fread($file, filesize($filename));
+            fclose($file);
+
+            $array = json_decode($json, true);
+//v($query['data']);
+            if ($array['table'] == $query['table']) {
+
+                if (isset($query['data'])) {
+
+                    if (! isset($query['where'])) {
+                        $query['where'] = false;
+                    }
+
+                    if (!empty($array['data'])) {
+                        $isChanged = false;
+
+                        foreach ($array['data'] as $key => $a_val) {
+                            $isMyItem = true;
+
+                            if ($query['where']) {
+                                for ($i=0; $i<count($query['where']); $i++) {
+                                    $whItem = $query['where'][$i];
+
+                                    if ($whItem['compare'] == "=") {
+                                        if ($a_val[$whItem['key']] != $whItem['value']) {
+                                            $isMyItem = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // запись
+                            if ($isMyItem) {
+                                $isChanged = true;
+
+                                foreach ($array['structure'] as $key2=>$val2) {
+
+                                    if (isset($query['data'][$key2])) {
+                                        $value = $query['data'][$key2];
+                                        $isValid = true;
+
+                                        // проверка только на int
+                                        if ($val2['type'] == "int") {
+                                            if ($value != (int) $value) {
+                                                $isValid = false;
+                                                $this->addLog("Неверный тип данных, не int", $operator);
+                                            }
+                                        }
+
+                                        // проверка количества символов
+                                        $strlen = mb_strlen($value, 'utf-8');
+                                        if ($val2['length'] < $strlen) {
+                                            $isValid = false;
+                                            $this->addLog("Количество символов больше указанного, > {$val2['length']}", $operator);
+                                        }
+
+                                        // сохранение
+                                        if ($isValid) {
+                                            $array['data'][$key][$key2] = $value;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($isChanged) {
+                            $string = json_encode($array);
+                            $file = fopen($filename, "w");
+
+                            if (fwrite($file, $string)) {
+                                fclose($file);
+                                return true;
+                            }
+                            else {
+                                $this->addLog("Невозможно записать данные в файл", $operator);
+                            }
+                            fclose($file);
+                        }
+                    }
+                }
+                else {
+                    $this->addLog("Нет данных в запросе", $operator);
+                }
+            }
+            else {
+                $this->addLog("Некорректный формат файла-таблицы. Возможно, таблица не создана", $operator);
+            }
+        }
+        else {
+            $this->addLog("Нет такого файла-таблицы", $operator);
+        }
+        return false;
+    }
+
+
+    /**
+     * $where = array(
+     *   array(
+     *     "key"=>"id",
+     *     "value"=>2,
+     *     "compare"=>"="
+     *   ),
+     *   array(
+     *     "key"=>"deleted",
+     *     "value"=>0,
+     *     "compare"=>"="
+     *   ),
+     *   array(
+     *     "key"=>"id",
+     *     "value"=>"DESC",
+     *     "compare"=>"ORDER BY"
+     *   ),
+     * );
+     */
+    private function _query_select($query, $operator) {
+        $filename = $this->config['db'] . $query['table'];
+        $resultArray = null;
+
+        if (file_exists($filename)){
+            $file = fopen($filename, "r");
+            $json = fread($file, filesize($filename));
+            fclose($file);
+
+            $array = json_decode($json, true);
+
+            if ($array['table'] == $query['table']) {
+
+                if (! isset($query['where'])) {
+                    $query['where'] = false;
+                }
+
+                if (! isset($query['what']) || $query['what'] == "*") {
+                    $query['what'] = false;
+                }
+
+                if (! isset($query['key'])) {
+                    $query['key'] = "id";
+                }
+
+                if (!empty($array['data'])) {
+                    $isOrderBy = false;
+
+                    foreach ($array['data'] as $key => $a_val) {
+                        $isMyItem = true;
+
+                        if ($query['where']) {
+                            for ($i=0; $i<count($query['where']); $i++) {
+                                $whItem = $query['where'][$i];
+
+                                if ($whItem['compare'] == "=") {
+                                    if ($a_val[$whItem['key']] != $whItem['value']) {
+                                        $isMyItem = false;
+                                        break;
+                                    }
+                                }
+                                else if ($whItem['compare'] == "ORDER BY") {
+                                    $isOrderBy = $whItem;
+                                }
+                            }
+                        }
+
+                        if ($isMyItem) {
+                            if (!isset($resultArray)) {
+                                $resultArray = array();
+                            }
+
+                            // $query['what'] пока не оправдан
+
+                            if ($query['mysql_num']) {
+                                $resultArray[] = $a_val;
+                            }
+                            else {
+                                $resultArray[$a_val[$query['key']]] = $a_val;
+                            }
+                        }
+                    }
+
+                    if ($isOrderBy) {
+                        \Sorts::setSortContext($isOrderBy);
+                        $sortResult = usort($resultArray, array("Sorts", "orderBy"));
+
+                        if (! $sortResult) {
+                            $this->addLog("Сортировка ORDER BY не удалась", $operator);
+                        }
+                    }
+                    return $resultArray;
+                }
+            }
+            else {
+                $this->addLog("Некорректный формат файла-таблицы. Возможно, таблица не создана", $operator);
+            }
+        }
+        else {
+            $this->addLog("Нет такого файла-таблицы", $operator);
+        }
+        return false;
+    }
 }
+
 
 
