@@ -46,7 +46,8 @@ class Database extends _Singleton {
 			//SQLite3::enableExceptions(true);
 		}
         else if ($this->mode == "files") {
-            include "database_ext/Sorts.php";
+            include_once "database_ext/Database_files.php";
+            include_once "database_ext/Sorts.php";
         }
 	}
 	public function getMode() {
@@ -661,6 +662,9 @@ class Database extends _Singleton {
 		elseif ($this->mode == "sqlite") {
 			return $this->select_lineSqlite($table, $where, $what);
 		}
+        elseif ($this->mode == "files") {
+            return $this->select_lineFiles($table, $where, $what);
+        }
 	}
 
 
@@ -686,6 +690,16 @@ class Database extends _Singleton {
 		}
 		return null;
 	}
+
+
+    private function select_lineFiles ($table, $where, $what) {
+        $query = array(
+            "table"=>$table,
+            "where"=>$where,
+            "what"=>$what
+        );
+        return $this->query($query, 'select_line');
+    }
 
 
     /**
@@ -990,6 +1004,15 @@ class Database extends _Singleton {
     }
 
 
+    public function deleted($table, $where) {
+        $query = array(
+            "table"=>$table,
+            "where"=>$where
+        );
+        return $this->query($query, 'deleted');
+    }
+
+
     /**
      * Обработка запросов для mode=files
      */
@@ -1005,6 +1028,12 @@ class Database extends _Singleton {
         }
         else if ($operator == "select") {
             return $this->_query_select($query, $operator);
+        }
+        else if ($operator == "select_line") {
+            return $this->_query_selectLine($query, $operator);
+        }
+        else if ($operator == "deleted") {
+            return $this->_query_deleted($query, $operator);
         }
     }
 
@@ -1338,7 +1367,7 @@ class Database extends _Singleton {
 
                 if (!empty($array['data'])) {
                     $isOrderBy = false;
-
+//v($query['where']);
                     foreach ($array['data'] as $key => $a_val) {
                         $isMyItem = true;
 
@@ -1348,6 +1377,12 @@ class Database extends _Singleton {
 
                                 if ($whItem['compare'] == "=") {
                                     if ($a_val[$whItem['key']] != $whItem['value']) {
+                                        $isMyItem = false;
+                                        break;
+                                    }
+                                }
+                                else if ($whItem['compare'] == "<") {
+                                    if ($a_val[$whItem['key']] >= $whItem['value']) {
                                         $isMyItem = false;
                                         break;
                                     }
@@ -1365,7 +1400,7 @@ class Database extends _Singleton {
 
                             // $query['what'] пока не оправдан
 
-                            if ($query['mysql_num']) {
+                            if (isset($query['mysql_num']) && $query['mysql_num'] == true) {
                                 $resultArray[] = $a_val;
                             }
                             else {
@@ -1384,6 +1419,89 @@ class Database extends _Singleton {
                     }
                     return $resultArray;
                 }
+            }
+            else {
+                $this->addLog("Некорректный формат файла-таблицы. Возможно, таблица не создана", $operator);
+            }
+        }
+        else {
+            $this->addLog("Нет такого файла-таблицы", $operator);
+        }
+        return false;
+    }
+
+
+    private function _query_selectLine($query, $operator) {
+        $result = $this->_query_select($query, $operator);
+
+        if ($result) {
+            return reset($result);
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    /**
+     * ORDER BY не реализован
+     */
+    private function _query_deleted($query, $operator) {
+        $filename = $this->config['db'] . $query['table'];
+
+        if (file_exists($filename)){
+            $file = fopen($filename, "r");
+            $json = fread($file, filesize($filename));
+            fclose($file);
+
+            $array = json_decode($json, true);
+
+            if ($array['table'] == $query['table']) {
+
+                    if (! isset($query['where'])) {
+                        $query['where'] = false;
+                    }
+
+                    if (!empty($array['data'])) {
+                        $isChanged = false;
+
+                        foreach ($array['data'] as $key => $a_val) {
+                            $isMyItem = true;
+
+                            if ($query['where']) {
+                                for ($i=0; $i<count($query['where']); $i++) {
+                                    $whItem = $query['where'][$i];
+
+                                    if ($whItem['compare'] == "=") {
+                                        if ($a_val[$whItem['key']] != $whItem['value']) {
+                                            $isMyItem = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // запись
+                            if ($isMyItem) {
+                                $isChanged = true;
+                                unset($array['data'][$key]);
+                            }
+                        }
+
+                        if ($isChanged) {
+                            $string = json_encode($array);
+                            $file = fopen($filename, "w");
+
+                            if (fwrite($file, $string)) {
+                                fclose($file);
+                                return true;
+                            }
+                            else {
+                                $this->addLog("Невозможно записать данные в файл", $operator);
+                            }
+                            fclose($file);
+                        }
+                    }
             }
             else {
                 $this->addLog("Некорректный формат файла-таблицы. Возможно, таблица не создана", $operator);
