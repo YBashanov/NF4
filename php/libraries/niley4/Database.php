@@ -1246,12 +1246,14 @@ class Database extends _Singleton {
 
                             if ($query['where']) {
                                 for ($i=0; $i<count($query['where']); $i++) {
-                                    $whItem = $query['where'][$i];
+                                    if (isset($query['where'][$i])) {
+                                        $whItem = $query['where'][$i];
 
-                                    if ($whItem['compare'] == "=") {
-                                        if ($a_val[$whItem['key']] != $whItem['value']) {
-                                            $isMyItem = false;
-                                            break;
+                                        if ($whItem['compare'] == "=") {
+                                            if ($a_val[$whItem['key']] != $whItem['value']) {
+                                                $isMyItem = false;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
