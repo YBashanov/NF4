@@ -449,16 +449,16 @@ class Lines extends _Singleton {
 
             //анализ $str - на конце может быть слэш, его надо убрать
             //не работает, если слешей несколько
-            $str[1] = str_replace("/", "", $str[1]);
+            $str[1] = str_replace("/", "", verify($str, 1));
 
             preg_match($this->reg_line_get, $str[1], $preg_array);
 
-            if ($str[1] == $preg_array[0]) {
+            if ($str[1] == verify($preg_array, 0)) {
                 $strgets = explode('&', $str[1]);
                 $array = array();
                 for ($i=0; $i<count($strgets); $i++){
                     $arr = explode('=', $strgets[$i]);
-                    $array[$arr[0]] = $arr[1];
+                    $array[$arr[0]] = verify($arr, 1);
                 }
                 $array2 = $array;
             }
