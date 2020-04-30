@@ -210,9 +210,6 @@ class Database extends _Singleton {
     }
 
 
-	/**
-	 * connect для sqlite
-	 */
 	private function connectSqlite($config) {
         $isValid = true;
 		if (! isset($config['db'])) {
@@ -245,9 +242,6 @@ class Database extends _Singleton {
 	}
 
 
-    /**
-     * connect для files
-     */
     private function connectFiles($config) {
         $isValid = true;
         if (! isset($config['db'])) {
@@ -290,9 +284,6 @@ class Database extends _Singleton {
 	}
 
 
-	/**
-	 *
-	 */
 	private function close_connectMysqli() {
         if (isset($this->link)){
             if ( @mysqli_close ($this->link)) {
@@ -310,9 +301,6 @@ class Database extends _Singleton {
     }
 
 
-	/**
-	 *
-	 */
 	private function close_connectSqlite() {
 		if (isset($this->link)){
             $return = $this->link->close();
@@ -332,9 +320,6 @@ class Database extends _Singleton {
 	}
 
 
-    /**
-	 *
-	 */
 	private function close_connectFiles() {
 		if (isset($this->link)){
             // пройтись в цикле и закрыть все файлы
@@ -353,6 +338,86 @@ class Database extends _Singleton {
      */
     public function __destruct(){
         $this->close_connect();
+    }
+
+
+    /**
+     * Проверка подключения к базе, для внешнего вывода, для внешних скриптов
+     * Возвращает ассоц.массив формата:
+     * [
+     *    "access" : true - если подключение есть, false - если есть ошибка
+     *    "message" : "сообщение об ошибке или пустое"
+     * ]
+     */
+    public function status() {
+        if ($this->mode == "mysqli") {
+            return $this->statusMysqli();
+        }
+        else {
+            $error = "метод реализован только для mode=mysqli";
+            echo $error;
+            $this->addLog($error, "status");
+        }
+    }
+
+
+    private function statusMysqli() {
+        $config = $this->config;
+
+        $status = array(
+            "message" => "",
+            "access" => true
+        );
+
+        if (! isset($config['character_set'])) {
+            $config['character_set'] = "utf8";
+        }
+
+        $isValid = true;
+        if (! isset($config['host'])) {
+            $status["message"] = "Отсутствует параметр host";
+            $isValid = false;
+        }
+        if (! isset($config['user'])) {
+            $status["message"] = "Отсутствует параметр user";
+            $isValid = false;
+        }
+        if (! isset($config['pass'])) {
+            $status["message"] = "Отсутствует параметр pass";
+            $isValid = false;
+        }
+        if (! isset($config['db'])) {
+            $status["message"] = "Отсутствует параметр db";
+            $isValid = false;
+        }
+
+        if ($isValid) {
+            $link = mysqli_connect($config['host'], $config['user'], $config['pass'], $config['db']);
+            if ($link) {
+                if (@mysqli_select_db($link, $config['db'])) {
+                    if (@mysqli_query($link, "SET CHARACTER SET '{$config['character_set']}'")) {
+                        if (@mysqli_query($link, "SET NAMES '{$config['character_set']}'")) {
+                            return $status;
+                        }
+                        else {
+                            $status["message"] = "Невозможно установить имена кодировки. Ошибка: " . mysqli_error($link) . ", кодировка - " . $config['character_set'];
+                        }
+                    }
+                    else {
+                        $status["message"] = "Невозможно перевести кодировку. Ошибка: " . mysqli_error($link) . ", кодировка - " . $config['character_set'];
+                    }
+                }
+                else {
+                    $status["message"] = "Невозможно открыть БД {$config['db']}. Ошибка: " . mysqli_error($link);
+                }
+            }
+            else {
+                $status["message"] = "Невозможно подключиться к серверу БД";
+            }
+        }
+        $status["access"] = false;
+
+        return $status;
     }
 
 
