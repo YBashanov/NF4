@@ -10,7 +10,19 @@ namespace niley4;
  * - {@link File::read} - Чтение файла по частям
  * - {@link File::scanDir} - Получить список файлов (директорий), находящихся в директории
  */
-class File extends _Singleton{
+class File extends _Singleton {
+
+
+    public function create($path) {
+        if (file_exists($path)) {
+            // $this->addLog("Данный файл уже создан: {$path}", __FILE__);
+            return false;
+        }
+
+        touch($path);
+        return true;
+    }
+
 
     /**
      * Чтение файла по частям (альтернатива file_get_contents)
@@ -30,6 +42,49 @@ class File extends _Singleton{
 
         fclose($handle);
         return $lines;
+    }
+
+
+    /**
+     * Запись в файл
+     *
+     * $path - путь к файлу
+     * $a_text - текстовоая строка или массив (в случае построчной записи в файл)
+     *      Если пустая, то при дозаписи не переносится на новую строку
+     * $flag
+     *      '' - построчная запись в файл
+     *      'ADD_TO_END' - дозапись в конец файла
+     *      'ADD_TO_START' - дозапись в конец файла
+     */
+    public function write($path, $a_text = '', $flag = ''){
+        $f = null;
+
+        // построчная запись в конец файла
+        if ($flag == '') {
+            $f = fopen($path, 'a');
+
+            for ($i=0; $i<count($a_text); $i++) {
+                fwrite($f, $a_text[$i] . PHP_EOL);
+            }
+
+            fclose($f);
+        }
+        // дозапись в конец файла
+        elseif ($flag == 'ADD_TO_END') {
+            $f = fopen($path, 'a');
+            $toWriteText = $a_text ? $a_text . PHP_EOL : $a_text;
+            fwrite($f, $toWriteText);
+            fclose($f);
+        }
+        elseif ($flag == 'ADD_TO_START') {
+            $f = fopen($path, 'w');
+            $toWriteText = $a_text ? $a_text . PHP_EOL : $a_text;
+            fwrite($f, $toWriteText);
+            fclose($f);
+        }
+        else {
+            $this->addLog("Указан неверный flag", __FILE__);
+        }
     }
 
 
