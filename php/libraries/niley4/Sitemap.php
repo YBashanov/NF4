@@ -93,14 +93,22 @@ class Sitemap extends _Singleton{
             $time = $this->time;
         }
 
-        $this->xmlText .= "<url>
-<loc>".htmlspecialchars($url, ENT_QUOTES)."</loc>
-<lastmod>".date('Y-m-d', $time)."</lastmod>
-<changefreq>".($changefreq ? $changefreq : $this->getFreq($time))."</changefreq>
-<priority>".str_replace(',', '.', ($priority ? floatval($priority) : $this->pr))."</priority>
+        // проверить урл на двойной слэш. Если есть - не пропускаем
+        $isDoubleSlash = strpos($url, "//", 9);
+
+        if (! $isDoubleSlash) {
+            $this->xmlText .= "<url>
+<loc>" . htmlspecialchars($url, ENT_QUOTES) . "</loc>
+<lastmod>" . date('Y-m-d', $time) . "</lastmod>
+<changefreq>" . ($changefreq ? $changefreq : $this->getFreq($time)) . "</changefreq>
+<priority>" . str_replace(',', '.', ($priority ? floatval($priority) : $this->pr)) . "</priority>
 </url>\n";
 
-        $this->i++;
+            $this->i++;
+        }
+        else {
+            $this->addLog("Sitemap->setPage: в урле есть двойной слэш: {$url}");
+        }
     }
 
 
