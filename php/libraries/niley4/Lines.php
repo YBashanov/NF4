@@ -22,7 +22,7 @@ namespace niley4;
  * - L_line (Line_inquiry)
  * - Line_inquiryFast
  */
-class Line extends _Singleton {
+class Lines extends _Singleton {
 
     private $trueError = true;
     private static $progressive = true; //активация работы класса через index.php
@@ -450,24 +450,25 @@ class Line extends _Singleton {
         $array2 = array();
         if ($line) {
             $str = explode('?', $line);
+            if (isset($str[1])) {
+                //анализ $str - на конце может быть слэш, его надо убрать
+                //не работает, если слешей несколько
+                $str[1] = str_replace("/", "", $str[1]);
 
-            //анализ $str - на конце может быть слэш, его надо убрать
-            //не работает, если слешей несколько
-            $str[1] = str_replace("/", "", $str[1]);
+                preg_match($this->reg_line_get, $str[1], $preg_array);
 
-            preg_match($this->reg_line_get, $str[1], $preg_array);
-
-            if ($str[1] == $preg_array[0]) {
-                $strgets = explode('&', $str[1]);
-                $array = array();
-                for ($i=0; $i<count($strgets); $i++){
-                    $arr = explode('=', $strgets[$i]);
-                    $array[$arr[0]] = $arr[1];
+                if ($str[1] == $preg_array[0]) {
+                    $strgets = explode('&', $str[1]);
+                    $array = array();
+                    for ($i = 0; $i < count($strgets); $i++) {
+                        $arr = explode('=', $strgets[$i]);
+                        $array[$arr[0]] = $arr[1];
+                    }
+                    $array2 = $array;
                 }
-                $array2 = $array;
-            }
 
-            $s_get .= $str[1];
+                $s_get .= $str[1];
+            }
         }
         $result = array_merge ($array1, $array2);
         $this->get = $result;
