@@ -13,6 +13,20 @@
 * - Возможность отправки нескольким получателям
 * - Автоматическое формирование заголовков письма
 * - Возможность фложения файлов в письмо
+*
+* include "{$separator}libraries/niley4/SendMailSmtp_v1.1.php";
+* $mailSMTP = new SendMailSmtp('login', 'pass', 'ssl://smtp.yandex.ru', 465, "utf-8");
+*
+* include "{$separator}data/_mail/toManager_avangardPay.php";
+* $result = $mailSMTP->send(
+*   $mailText['to'],
+*   $mailText['theme'],
+*   $mailText['mess'],
+*   array($mailText['from_info'], $mailText['from_mail'])
+* );
+* if ($result){
+*
+* }
 */
 class SendMailSmtp {
 
