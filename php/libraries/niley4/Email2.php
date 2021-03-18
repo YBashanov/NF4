@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * 2020-12-03 - новая функция по отправке email-сообщения с кривых серверов
+ *      Заголовки собираются вручную
+ * 2021-03-19 - добавлен метод send для отправки письма без заголовка
+ */
+
 namespace niley4;
 
 
@@ -7,14 +13,14 @@ namespace niley4;
  * protocol = mail
  * mailtype = text (html в разработке)
  */
-class Email extends _Singleton {
+class Email2 extends _Singleton{
     private $from_name = "";
     private $from_to = "";
     private $reply_name = "";
     private $reply_to = "";
     private $mail_to = "";
     private $mail_to_error = "bjork-xamlo@yandex.ru";
-    private $theme = "";
+    private $subject = "";
     private $message = "";
     private $pathToFile = "";
     
@@ -29,7 +35,7 @@ class Email extends _Singleton {
         $this->reply_to = "";
         $this->mail_to = "";
         $this->mail_to_error = "bjork-xamlo@yandex.ru";
-        $this->theme = "";
+        $this->subject = "";
         $this->message = "";
         $this->pathToFile = "";
     }
@@ -74,8 +80,8 @@ class Email extends _Singleton {
     /**
      * тема письма
      */
-    public function subject($theme) {
-        $this->theme = $theme;
+    public function subject($subject) {
+        $this->subject = $subject;
     }
 
 
@@ -95,14 +101,43 @@ class Email extends _Singleton {
     }
 
 
+    /**
+     * Отправка текстового сообщения
+     */
+    public function send() {
+
+$headers = 'User-Agent:*
+Date: Tue, 18 Mar 2021 14:48:16 +0300
+From: '.$this->from_name.' <'.$this->from_to.'>
+Reply-To: '.$this->reply_name.' <'.$this->reply_to.'>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="B_ATC_5fc76a0524a56"';
+
+
+$body = '--B_ATC_5fc76a0524a56
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+'.$this->message.'
+
+--B_ATC_5fc76a0524a56--';
+
+
+        if (mail($this->mail_to, $this->subject, $body, $headers, "-f {$this->mail_to_error}")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     /**
      * Отправка сообщения с вложением
      */
     public function sendWithAttach() {
-        $subject = $this->_prep_q_encoding($this->theme);
+        //$subject = $this->_prep_q_encoding($this->subject);
         // не работает на сайте gyrnal.ru
-        $from = $this->_prep_q_encoding($this->from_name, true) . ' <'.$this->from_to.'>';
+        //$from = $this->_prep_q_encoding($this->from_name, true) . ' <'.$this->from_to.'>';
         $attachment = $this->_getAttachment($this->pathToFile);
 
 
@@ -131,7 +166,7 @@ Content-Transfer-Encoding: base64
 --B_ATC_5fc76a0524a56--';
 
 
-        if (mail($this->mail_to, $subject, $body, $headers, "-f {$this->mail_to_error}")) {
+        if (mail($this->mail_to, $this->subject, $body, $headers, "-f {$this->mail_to_error}")) {
             return true;
         }
         else {
