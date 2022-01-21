@@ -855,6 +855,35 @@ class Database extends _Singleton {
 		$result = $result!==''?substr($result, 0, -2):$result;
 		return $result;
 	}
+
+
+    /**
+     * удаление данных из таблицы (необратимо)
+     */
+    public function delete($table, $where = true){
+        if ($this->mode == "mysqli") {
+            return $this->deleteMysqli($table, $where);
+        }
+        elseif ($this->mode == "sqlite") {
+            return $this->deleteSqlite($table, $where);
+        }
+    }
+    private function deleteMysqli($table, $where) {
+        $query = "DELETE FROM {$table} WHERE {$where}";
+
+        if (! $this->query($query, 'delete')){
+            return false;
+        }
+        return true;
+    }
+    private function deleteSqlite($table, $where) {
+        $query = "DELETE FROM {$table} WHERE {$where}";
+
+        if (! $this->query($query, 'delete')){
+            return false;
+        }
+        return true;
+    }
 }
 
 
