@@ -399,7 +399,14 @@ class Lines extends _Singleton {
     //возвращает массив
     //формат: [id]=>'', [name]=>'значение1', ...
     private function processing_line(){
-        $array_GET = explode("&", $this->preg_line);
+		$array_question = explode("?", $this->preg_line);
+		if (count($array_question) == 1) {
+			$array_GET = explode("&", $array_question[0]);
+        }
+		else {
+			$array_GET = explode("&", $array_question[1]);
+        }
+		
         $array = array();
         for ($i = 0; $i<count($array_GET); $i++) {
             $keyANDval = explode("=", $array_GET[$i]);
